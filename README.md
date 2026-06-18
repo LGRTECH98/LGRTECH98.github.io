@@ -16,4 +16,4 @@ _ CSS
 
 ## How to Reach Me
 - Email: [kibetken112k@gmail.com]
-- github profile [https://github.com/LGRTECH98]
+- github profile [https://github.com/LGRTECH98/LGRTECH98.github.io]
