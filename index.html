@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Femmy FX Trading Account</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #080b12;
+    --panel: #10151f;
+    --panel2: #151b27;
+    --border: #252d3b;
+    --text: #eef2f7;
+    --muted: #8792a5;
+    --green: #16c784;
+    --red: #ea3943;
+    --blue: #3b82f6;
+    --yellow: #f5b942;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.topbar {
+    height: 70px;
+    background: #0c1018;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #16c784, #147dff);
+    font-size: 20px;
+    font-weight: 900;
+    color: white;
+}
+
+.brand h2 {
+    font-size: 17px;
+    letter-spacing: .5px;
+}
+
+.brand small {
+    color: var(--muted);
+    font-size: 10px;
+    display: block;
+    margin-top: 2px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.demo-badge {
+    background: rgba(245,185,66,.12);
+    color: var(--yellow);
+    border: 1px solid rgba(245,185,66,.3);
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.account-name {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* ================= LAYOUT ================= */
+
+.app {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    min-height: calc(100vh - 70px);
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+    background: #0c1018;
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+}
+
+.nav-title {
+    color: #596477;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin: 8px 12px;
+    letter-spacing: 1px;
+}
+
+.nav-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #171e2b;
+    color: white;
+}
+
+.account-card {
+    margin-top: 30px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.account-card small {
+    color: var(--muted);
+}
+
+.account-card h3 {
+    margin-top: 7px;
+}
+
+/* ================= MAIN ================= */
+
+.workspace {
+    padding: 20px;
+    overflow: hidden;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.stat span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.stat h3 {
+    margin-top: 7px;
+    font-size: 20px;
+}
+
+.green {
+    color: var(--green);
+}
+
+.red {
+    color: var(--red);
+}
+
+/* ================= TERMINAL ================= */
+
+.terminal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 12px;
+}
+
+.chart-panel,
+.right-panel,
+.bottom-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+/* ================= CHART ================= */
+
+.chart-toolbar {
+    min-height: 65px;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.symbol-name {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.market-type {
+    font-size: 10px;
+    color: var(--green);
+    background: rgba(22,199,132,.1);
+    padding: 4px 7px;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
+.timeframes {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.timeframes button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    padding: 7px 9px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.timeframes button:hover,
+.timeframes button.active {
+    background: #202938;
+    color: white;
+}
+
+.chart-container {
+    height: 510px;
+    width: 100%;
+    position: relative;
+}
+
+#chart {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.chart-info {
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 18px;
+    padding: 9px 15px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.chart-info strong {
+    color: white;
+}
+
+/* ================= RIGHT PANEL ================= */
+
+.right-panel {
+    padding: 14px;
+}
+
+.section-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+/* Quotes */
+
+.quote-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.quote {
+    border-radius: 8px;
+    padding: 12px;
+    background: #0c1119;
+    border: 1px solid var(--border);
+}
+
+.quote small {
+    color: var(--muted);
+}
+
+.quote strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 17px;
+}
+
+/* Order */
+
+.order-box {
+    margin-top: 18px;
+}
+
+.side-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 13px;
+}
+
+.side-buttons button {
+    padding: 11px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #151b25;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.buy-active {
+    background: rgba(22,199,132,.16) !important;
+    color: var(--green) !important;
+    border-color: var(--green) !important;
+}
+
+.sell-active {
+    background: rgba(234,57,67,.16) !important;
+    color: var(--red) !important;
+    border-color: var(--red) !important;
+}
+
+.form-group {
+    margin-bottom: 11px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    background: #0b1017;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--blue);
+}
+
+.order-button {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 7px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.order-buy {
+    background: var(--green);
+}
+
+.order-sell {
+    background: var(--red);
+}
+
+/* ================= WATCHLIST ================= */
+
+.watchlist {
+    margin-top: 20px;
+}
+
+.watch-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    padding: 10px 6px;
+    border-bottom: 1px solid #1b222e;
+    cursor: pointer;
+}
+
+.watch-row:hover {
+    background: #151b25;
+}
+
+.watch-symbol {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.watch-price {
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.watch-change {
+    font-size: 11px;
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom-panel {
+    margin-top: 12px;
+    padding: 15px;
+}
+
+.tabs {
+    display: flex;
+    gap: 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.tab {
+    padding: 9px 2px;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.tab.active {
+    color: white;
+    border-bottom: 2px solid var(--blue);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+th {
+    color: var(--muted);
+    text-align: left;
+    padding: 9px;
+    font-weight: 500;
+}
+
+td {
+    padding: 10px 9px;
+    border-top: 1px solid #1b222e;
+}
+
+.close-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: white;
+}
+
+/* ================= TOAST ================= */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #18202d;
+    border: 1px solid var(--border);
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: none;
+    font-size: 12px;
+    z-index: 100;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 1100px) {
+    .sidebar {
+        display: none;
+    }
+
+    .app {
+        grid-template-columns: 1fr;
+    }
+
+    .terminal {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 600px) {
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .account-name {
+        display: none;
+    }
+
+    .workspace {
+        padding: 10px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat h3 {
+        font-size: 15px;
+    }
+
+    .chart-container {
+        height: 400px;
+    }
+
+    .chart-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .chart-info {
+        overflow-x: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="logo">F</div>
+
+        <div>
+            <h2>FEMMY FX</h2>
+            <small>TRADING TERMINAL</small>
+        </div>
+    </div>
+
+    <div class="header-right">
+
+        <span class="demo-badge">
+            ● DEMO / SIMULATED DATA
+        </span>
+
+        <span class="account-name">
+            Demo Account
+        </span>
+
+    </div>
+
+</header>
+
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="nav-title">Workspace</div>
+
+        <div class="nav-item active">
+            📊 Dashboard
+        </div>
+
+        <div class="nav-item">
+            📈 Markets
+        </div>
+
+        <div class="nav-item">
+            🕯 Chart
+        </div>
+
+        <div class="nav-item">
+            💼 Portfolio
+        </div>
+
+        <div class="nav-item">
+            🧾 History
+        </div>
+
+        <div class="nav-item">
+            ⚙ Settings
+        </div>
+
+        <div class="account-card">
+
+            <small>Demo balance</small>
+
+            <h3>$10,000.00</h3>
+
+            <small>Account status</small>
+
+            <p class="green">● Active</p>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="workspace">
+
+        <!-- STATS -->
+
+        <section class="stats">
+
+            <div class="stat">
+                <span>Balance</span>
+                <h3 id="balance">$10,000.00</h3>
+            </div>
+
+            <div class="stat">
+                <span>Equity</span>
+                <h3 id="equity">$10,000.00</h3>
+            </div>
+
+            <div class="stat">
+                <span>Demo P/L</span>
+                <h3 id="totalPnl" class="green">$0.00</h3>
+            </div>
+
+            <div class="stat">
+                <span>Free Funds</span>
+                <h3 id="freeFunds">$10,000.00</h3>
+            </div>
+
+        </section>
+
+
+        <!-- TRADING TERMINAL -->
+
+        <section class="terminal">
+
+            <!-- CHART -->
+
+            <div class="chart-panel">
+
+                <div class="chart-toolbar">
+
+                    <div>
+
+                        <span class="symbol-name" id="chartSymbol">
+                            EUR/USD
+                        </span>
+
+                        <span class="market-type">
+                            FOREX
+                        </span>
+
+                    </div>
+
+
+                    <div class="timeframes">
+
+                        <button data-timeframe="1m">1m</button>
+                        <button data-timeframe="5m">5m</button>
+                        <button data-timeframe="15m" class="active">15m</button>
+                        <button data-timeframe="1h">1H</button>
+                        <button data-timeframe="4h">4H</button>
+                        <button data-timeframe="1d">1D</button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-container">
+                    <canvas id="chart"></canvas>
+                </div>
+
+
+                <div class="chart-info">
+
+                    <span>
+                        O <strong id="openValue">-</strong>
+                    </span>
+
+                    <span>
+                        H <strong id="highValue">-</strong>
+                    </span>
+
+                    <span>
+                        L <strong id="lowValue">-</strong>
+                    </span>
+
+                    <span>
+                        C <strong id="closeValue">-</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT PANEL -->
+
+            <aside class="right-panel">
+
+                <div class="section-title">
+                    Market
+                </div>
+
+                <div class="quote-grid">
+
+                    <div class="quote">
+
+                        <small>Bid</small>
+
+                        <strong id="bidPrice">
+                            1.17245
+                        </strong>
+
+                    </div>
+
+                    <div class="quote">
+
+                        <small>Ask</small>
+
+                        <strong id="askPrice">
+                            1.17257
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORDER -->
+
+                <div class="order-box">
+
+                    <div class="section-title">
+                        Demo Order
+                    </div>
+
+                    <div class="side-buttons">
+
+                        <button id="buyTab" class="buy-active">
+                            BUY
+                        </button>
+
+                        <button id="sellTab">
+                            SELL
+                        </button>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Order type</label>
+
+                        <select>
+                            <option>Market</option>
+                            <option>Limit — Demo</option>
+                            <option>Stop — Demo</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Position size</label>
+
+                        <input
+                            type="number"
+                            id="orderSize"
+                            value="0.10"
+                            min="0.01"
+                            step="0.01"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Demo Stop Loss</label>
+
+                        <input
+                            type="number"
+                            id="stopLoss"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Demo Take Profit</label>
+
+                        <input
+                            type="number"
+                            id="takeProfit"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <button
+                        id="orderButton"
+                        class="order-button order-buy"
+                    >
+                        PLACE DEMO BUY
+                    </button>
+
+                </div>
+
+
+                <!-- WATCHLIST -->
+
+                <div class="watchlist">
+
+                    <div class="section-title">
+                        Watchlist
+                    </div>
+
+                    <div id="watchlistContainer"></div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <!-- POSITIONS -->
+
+        <section class="bottom-panel">
+
+            <div class="tabs">
+
+                <div class="tab active">
+                    Open Positions
+                </div>
+
+                <div class="tab">
+                    Order History
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Side</th>
+                            <th>Size</th>
+                            <th>Entry</th>
+                            <th>Current</th>
+                            <th>Demo P/L</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="positionsBody">
+
+                        <tr>
+                            <td colspan="7">
+                                No open demo positions
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section class="bottom-panel">
+
+            <div class="section-title">
+                Recent Demo Orders
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Time</th>
+                            <th>Symbol</th>
+                            <th>Side</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historyBody">
+
+                        <tr>
+                            <td colspan="6">
+                                No demo orders yet
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =========================================
+   FEMMY FX DEMO TRADING TERMINAL
+========================================= */
+
+const symbols = {
+
+    "EUR/USD": {
+        price: 1.17250,
+        digits: 5,
+        spread: 0.00012,
+        volatility: 0.00035,
+        type: "FOREX"
+    },
+
+    "GBP/USD": {
+        price: 1.34200,
+        digits: 5,
+        spread: 0.00015,
+        volatility: 0.00045,
+        type: "FOREX"
+    },
+
+    "USD/JPY": {
+        price: 148.250,
+        digits: 3,
+        spread: 0.015,
+        volatility: 0.08,
+        type: "FOREX"
+    },
+
+    "XAU/USD": {
+        price: 2650.20,
+        digits: 2,
+        spread: 0.25,
+        volatility: 1.8,
+        type: "GOLD"
+    },
+
+    "BTC/USD": {
+        price: 67450,
+        digits: 2,
+        spread: 18,
+        volatility: 140,
+        type: "CRYPTO"
+    },
+
+    "GBP/JPY": {
+        price: 199.800,
+        digits: 3,
+        spread: 0.025,
+        volatility: 0.12,
+        type: "FOREX"
+    }
+
+};
+
+
+let currentSymbol = "EUR/USD";
+let currentTimeframe = "15m";
+let tradeSide = "buy";
+
+let balance = 10000;
+
+let positions = [];
+let orderHistory = [];
+
+let candles = {};
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function formatPrice(value, symbol = currentSymbol) {
+
+    return value.toFixed(symbols[symbol].digits);
+
+}
+
+
+function randomMove(volatility) {
+
+    return (Math.random() - 0.5) * volatility;
+
+}
+
+
+function createCandles(symbol) {
+
+    const config = symbols[symbol];
+
+    let price = config.price;
+
+    const data = [];
+
+    for (let i = 0; i < 100; i++) {
+
+        const open = price;
+
+        const movement =
+            randomMove(config.volatility * 2);
+
+        const close = Math.max(
+            0.0001,
+            open + movement
+        );
+
+        const high =
+            Math.max(open, close) +
+            Math.random() * config.volatility;
+
+        const low =
+            Math.min(open, close) -
+            Math.random() * config.volatility;
+
+        const volume =
+            500 + Math.random() * 5000;
+
+    
