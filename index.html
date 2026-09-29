@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGR Store | Online Shopping</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
+
+header{
+  background:#111827;color:white;padding:16px 6%;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:1000
+}
+.logo{font-size:25px;font-weight:bold}
+.logo span{color:#00c2d7}
+nav{display:flex;gap:22px}
+nav a{color:white;text-decoration:none}
+nav a:hover{color:#00c2d7}
+.cart-btn{
+  border:0;background:#00bcd4;color:white;padding:11px 17px;
+  border-radius:6px;cursor:pointer;font-weight:bold
+}
+
+.hero{
+  min-height:430px;color:white;padding:80px 8%;
+  display:flex;align-items:center;
+  background:linear-gradient(#0009,#0009),
+  url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d")
+  center/cover
+}
+.hero h1{font-size:52px;margin-bottom:15px}
+.hero p{font-size:20px;margin-bottom:25px}
+.shop-btn{
+  display:inline-block;background:#00bcd4;color:white;
+  padding:14px 25px;border-radius:6px;text-decoration:none
+}
+
+.section{padding:60px 6%}
+.section h2{text-align:center;font-size:32px;margin-bottom:30px}
+
+.controls{
+  display:flex;gap:15px;justify-content:center;margin-bottom:30px
+}
+.controls input,.controls select{
+  width:280px;padding:13px;border:1px solid #ddd;border-radius:6px
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:24px
+}
+.card{
+  background:white;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 15px #00000012;transition:.25s
+}
+.card:hover{transform:translateY(-5px)}
+.card img{width:100%;height:210px;object-fit:cover}
+.card-body{padding:18px}
+.card-body h3{margin-bottom:8px}
+.category{font-size:13px;color:#777;margin-bottom:8px}
+.price{font-size:19px;font-weight:bold;color:#0097a7;margin:10px 0}
+.add{
+  width:100%;border:0;background:#111827;color:white;
+  padding:11px;border-radius:6px;cursor:pointer
+}
+.add:hover{background:#00bcd4}
+
+.about,.contact{background:white;padding:65px 10%;text-align:center}
+.about p{max-width:700px;margin:auto;line-height:1.7}
+
+form{
+  max-width:600px;margin:auto;display:flex;
+  flex-direction:column;gap:14px
+}
+form input,form textarea{
+  padding:13px;border:1px solid #ddd;border-radius:6px
+}
+form textarea{height:130px}
+form button{
+  border:0;background:#00bcd4;color:white;
+  padding:13px;border-radius:6px;cursor:pointer
+}
+
+/* CART */
+.cart{
+  position:fixed;right:-420px;top:0;width:400px;height:100vh;
+  background:white;z-index:2000;box-shadow:-5px 0 20px #0003;
+  transition:.3s;display:flex;flex-direction:column
+}
+.cart.open{right:0}
+.cart-head{
+  background:#111827;color:white;padding:20px;
+  display:flex;justify-content:space-between
+}
+.cart-head button{
+  border:0;background:none;color:white;font-size:22px;cursor:pointer
+}
+#cartItems{flex:1;overflow:auto;padding:20px}
+.cart-item{
+  border-bottom:1px solid #eee;padding:14px 0;
+  display:flex;justify-content:space-between;gap:10px
+}
+.qty button{
+  border:0;padding:4px 8px;cursor:pointer
+}
+.remove{
+  background:#ef4444;color:white;border:0;
+  padding:5px 8px;border-radius:4px
+}
+.cart-bottom{padding:20px;border-top:1px solid #ddd}
+.checkout-btn{
+  width:100%;padding:14px;border:0;background:#00bcd4;
+  color:white;border-radius:6px;margin-top:12px;cursor:pointer
+}
+
+/* CHECKOUT */
+.modal{
+  display:none;position:fixed;inset:0;background:#0009;
+  z-index:3000;align-items:center;justify-content:center;padding:20px
+}
+.modal.show{display:flex}
+.checkout-box{
+  background:white;width:100%;max-width:550px;
+  max-height:90vh;overflow:auto;border-radius:12px;padding:25px
+}
+.checkout-box h2{margin-bottom:20px}
+.close{
+  float:right;border:0;background:none;font-size:24px;cursor:pointer
+}
+.summary{
+  background:#f5f5f5;padding:15px;border-radius:7px;margin-bottom:20px
+}
+.payment-methods{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin:15px 0
+}
+.payment-method{
+  border:2px solid #ddd;background:white;padding:12px;
+  border-radius:7px;cursor:pointer
+}
+.payment-method.selected{
+  border-color:#00bcd4;background:#e9fbfd
+}
+.pay-box{
+  display:none;background:#f8fafc;padding:15px;border-radius:7px
+}
+.pay-box.active{display:block}
+.pay-box input{
+  width:100%;padding:12px;margin:6px 0;
+  border:1px solid #ddd;border-radius:5px
+}
+.pay-now{
+  width:100%;padding:14px;border:0;background:#111827;
+  color:white;border-radius:6px;margin-top:15px;cursor:pointer
+}
+
+footer{background:#111827;color:white;text-align:center;padding:25px}
+
+@media(max-width:700px){
+  nav{display:none}
+  .hero h1{font-size:38px}
+  .controls{flex-direction:column}
+  .controls input,.controls select{width:100%}
+  .cart{width:100%;right:-100%}
+  .payment-methods{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">LGR <span>STORE</span></div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Products</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <button class="cart-btn" onclick="openCart()">
+    🛒 Cart (<span id="cartCount">0</span>)
+  </button>
+</header>
+
+<section class="hero" id="home">
+  <div>
+    <h1>Shop at LGR Store</h1>
+    <p>Technology, fashion, shoes and more.</p>
+    <a class="shop-btn" href="#products">Shop Now</a>
+  </div>
+</section>
+
+<section class="section" id="products">
+  <h2>Our Products</h2>
+
+  <div class="controls">
+    <input id="search" placeholder="Search products..." oninput="renderProducts()">
+
+    <select id="category" onchange="renderProducts()">
+      <option value="all">All Categories</option>
+      <option value="electronics">Electronics</option>
+      <option value="fashion">Fashion</option>
+      <option value="shoes">Shoes</option>
+      <option value="gaming">Gaming</option>
+      <option value="camera">Cameras</option>
+    </select>
+  </div>
+
+  <div class="products" id="productsList"></div>
+</section>
+
+<section class="about" id="about">
+  <h2>About LGR Store</h2>
+  <p>
+    LGR Store is an online shopping website where customers can
+    browse products, add products to their cart and proceed to checkout.
+  </p>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Contact Us</h2>
+
+  <form onsubmit="sendMessage(event)">
+    <input placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <textarea placeholder="Your Message" required></textarea>
+    <button>Send Message</button>
+  </form>
+</section>
+
+<!-- CART -->
+<div class="cart" id="cart">
+
+  <div class="cart-head">
+    <h2>Your Cart</h2>
+    <button onclick="closeCart()">✕</button>
+  </div>
+
+  <div id="cartItems"></div>
+
+  <div class="cart-bottom">
+    <h3>Total: KSh <span id="cartTotal">0</span></h3>
+    <button class="checkout-btn" onclick="openCheckout()">
+      Proceed to Checkout
+    </button>
+  </div>
+
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal" id="checkoutModal">
+
+  <div class="checkout-box">
+
+    <button class="close" onclick="closeCheckout()">✕</button>
+
+    <h2>Checkout</h2>
+
+    <div class="summary">
+      <strong>Order Total:</strong>
+      KSh <span id="checkoutTotal">0</span>
+    </div>
+
+    <h3>Choose Payment Method</h3>
+
+    <div class="payment-methods">
+
+      <button
+        class="payment-method selected"
+        onclick="selectPayment('mpesa',this)">
+        📱 M-Pesa
+      </button>
+
+      <button
+        class="payment-method"
+        onclick="selectPayment('card',this)">
+        💳 Card
+      </button>
+
+      <button
+        class="payment-method"
+        onclick="selectPayment('paypal',this)">
+        🅿️ PayPal
+      </button>
+
+    </div>
+
+    <!-- M-PESA -->
+    <div class="pay-box active" id="mpesaBox">
+
+      <h3>M-Pesa Checkout</h3>
+
+      <input
+        id="mpesaPhone"
+        placeholder="M-Pesa number e.g. 2547XXXXXXXX"
+        type="tel">
+
+      <p>
+        In the production version, this number would be sent
+        securely to the payment server to initiate the M-Pesa request.
+      </p>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="pay-box" id="cardBox">
+
+      <h3>Card Checkout</h3>
+
+      <input placeholder="Cardholder name">
+
+      <input
+        placeholder="Card number"
+        inputmode="numeric">
+
+      <input
+        placeholder="MM / YY"
+        inputmode="numeric">
+
+      <input
+        placeholder="CVV"
+        type="password"
+        maxlength="4">
+
+      <p>
+        For production, card details should be collected through
+        the payment provider's secure checkout rather than stored
+        by this website.
+      </p>
+
+    </div>
+
+    <!-- PAYPAL -->
+    <div class="pay-box" id="paypalBox">
+
+      <h3>PayPal Checkout</h3>
+
+      <p>
+        The production version will display the official PayPal
+        checkout button here after the PayPal client ID and
+        server-side order endpoint are configured.
+      </p>
+
+    </div>
+
+    <button class="pay-now" onclick="startPayment()">
+      Continue to Payment
+    </button>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 LGR Store. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+const products = [
+
+  {
+    id:1,
+    name:"iPhone",
+    price:85000,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd"
+  },
+
+  {
+    id:2,
+    name:"Samsung Galaxy",
+    price:65000,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf"
+  },
+
+  {
+    id:3,
+    name:"Laptop",
+    price:95000,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
+  },
+
+  {
+    id:4,
+    name:"Wireless Headphones",
+    price:8500,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+  },
+
+  {
+    id:5,
+    name:"Smart Watch",
+    price:12000,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+  },
+
+  {
+    id:6,
+    name:"Bluetooth Speaker",
+    price:6500,
+    category:"electronics",
+    image:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1"
+  },
+
+  {
+    id:7,
+    name:"T-Shirt",
+    price:1500,
+    category:"fashion",
+    image:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+  },
+
+  {
+    id:8,
+    name:"Hoodie",
+    price:3500,
+    category:"fashion",
+    image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7"
+  },
+
+  {
+    id:9,
+    name:"Jeans",
+    price:4000,
+    category:"fashion",
+    image:"https://images.unsplash.com/photo-1542272604-787c3835535d"
+  },
+
+  {
+    id:10,
+    name:"Sneakers",
+    price:5500,
+    category:"shoes",
+    image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+  },
+
+  {
+    id:11,
+    name:"Running Shoes",
+    price:6500,
+    category:"shoes",
+    image:"https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2"
+  },
+
+  {
+    id:12,
+    name:"Gaming Controller",
+    price:7500,
+    category:"gaming",
+    image:"https://images.unsplash.com/photo-1600080972464-8e5f35f63d08"
+  },
+
+  {
+    id:13,
+    name:"Gaming Headset",
+    price:9000,
+    category:"gaming",
+    image:"https://images.unsplash.com/photo-1599669454699-248893623440"
+  },
+
+  {
+    id:14,
+    name:"Digital Camera",
+    price:55000,
+    category:"camera",
+    image:"https://images.unsplash.com/photo-1516035069371-29a1b244cc32"
+  },
+
+  {
+    id:15,
+    name:"DSLR Camera",
+    price:85000,
+    category:"camera",
+    image:"https://images.unsplash.com/photo-1502920917128-1aa500764cbd"
+  }
+
+];
+
+let cart=[];
+let selectedPayment="mpesa";
+
+
+function money(amount){
+  return amount.toLocaleString("en-KE");
+}
+
+
+function renderProducts(){
+
+  const list=document.getElementById("productsList");
+
+  const search=document
+    .getElementById("search")
+    .value.toLowerCase();
+
+  const category=document
+    .getElementById("category")
+    .value;
+
+  const filtered=products.filter(p=>{
+
+    const searchMatch=p.name
+      .toLowerCase()
+      .includes(search);
+
+    const categoryMatch=
+      category==="all" ||
+      p.category===category;
+
+    return searchMatch && categoryMatch;
+
+  });
+
+  list.innerHTML="";
+
+  filtered.forEach(p=>{
+
+    list.innerHTML+=`
+
+      <div class="card">
+
+        <img
+          src="${p.image}"
+          alt="${p.name}"
+        >
+
+        <div class="card-body">
+
+          <h3>${p.name}</h3>
+
+          <div class="category">
+            ${p.category.toUpperCase()}
+          </div>
+
+          <div class="price">
+            KSh ${money(p.price)}
+          </div>
+
+          <button
+            class="add"
+            onclick="addToCart(${p.id})">
+            Add to Cart
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+
+function addToCart(id){
+
+  const product=products.find(p=>p.id===id);
+
+  const existing=cart.find(p=>p.id===id);
+
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({...product,qty:1});
+  }
+
+  updateCart();
+
+}
+
+
+function updateCart(){
+
+  const items=document.getElementById("cartItems");
+
+  let total=0;
+  let count=0;
+
+  items.innerHTML="";
+
+  cart.forEach(item=>{
+
+    total+=item.price*item.qty;
+    count+=item.qty;
+
+    items.innerHTML+=`
+
+      <div class="cart-item">
+
+        <div>
+          <strong>${item.name}</strong>
+          <p>
+            KSh ${money(item.price)}
+          </p>
+
+          <div class="qty">
+
+            <button onclick="changeQty(${item.id},-1)">
+              −
+            </button>
+
+            ${item.qty}
+
+            <button onclick="changeQty(${item.id},1)">
+              +
+            </button>
+
+          </div>
+        </div>
+
+        <button
+          class="remove"
+          onclick="removeItem(${item.id})">
+          Remove
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById("cartCount").textContent=count;
+  document.getElementById("cartTotal").textContent=money(total);
+  document.getElementById("checkoutTotal").textContent=money(total);
+
+}
+
+
+function changeQty(id,amount){
+
+  const item=cart.find(p=>p.id===id);
+
+  if(!item)return;
+
+  item.qty+=amount;
+
+  if(item.qty<=0){
+    removeItem(id);
+    return;
+  }
+
+  updateCart();
+
+}
+
+
+function removeItem(id){
+
+  cart=cart.filter(p=>p.id!==id);
+
+  updateCart();
+
+}
+
+
+function openCart(){
+  document.getElementById("cart").classList.add("open");
+}
+
+
+function closeCart(){
+  document.getElementById("cart").classList.remove("open");
+}
+
+
+function openCheckout(){
+
+  if(cart.length===0){
+
+    alert("Your cart is empty.");
+
+    return;
+  }
+
+  document.getElementById("checkoutModal")
+    .classList.add("show");
+
+  updateCart();
+
+}
+
+
+function closeCheckout(){
+
+  document.getElementById("checkoutModal")
+    .classList.remove("show");
+
+}
+
+
+function selectPayment(method,button){
+
+  selectedPayment=method;
+
+  document
+    .querySelectorAll(".payment-method")
+    .forEach(b=>b.classList.remove("selected"));
+
+  button.classList.add("selected");
+
+  document
+    .querySelectorAll(".pay-box")
+    .forEach(box=>box.classList.remove("active"));
+
+  document
+    .getElementById(method+"Box")
+    .classList.add("active");
+
+}
+
+
+function startPayment(){
+
+  if(selectedPayment==="mpesa"){
+
+    const phone=
+      document.getElementById("mpesaPhone").value.trim();
+
+    if(!phone){
+
+      alert("Enter your M-Pesa phone number.");
+
+      return;
+    }
+
+    alert(
+      "DEMO CHECKOUT\\n\\n"+
+      "M-Pesa number: "+phone+
+      "\\n\\nThe production version will send this request to the secure payment server."
+    );
+
+  }
+
+  else if(selectedPayment==="card"){
+
+    alert(
+      "DEMO CARD CHECKOUT\\n\\n"+
+      "The production version will open the secure card-payment form provided by the payment gateway."
+    );
+
+  }
+
+  else if(selectedPayment==="paypal"){
+
+    alert(
+      "DEMO PAYPAL CHECKOUT\\n\\n"+
+      "The production version will create the PayPal order through the secure backend and then open PayPal checkout."
+    );
+
+  }
+
+}
+
+
+function sendMessage(event){
+
+  event.preventDefault();
+
+  alert("Your message has been sent.");
+
+  event.target.reset();
+
+}
+
+
+renderProducts();
+updateCart();
+
+</script>
+
+</body>
+</html>
