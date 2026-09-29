@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Femmy FX Trading Account</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #080d18;
+    color: white;
+}
+
+/* HEADER */
+
+header {
+    height: 70px;
+    background: #101827;
+    border-bottom: 1px solid #273449;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #22c55e;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #22c55e;
+}
+
+.login-btn {
+    background: #22c55e;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* MAIN */
+
+main {
+    width: 90%;
+    max-width: 1250px;
+    margin: auto;
+}
+
+section {
+    padding: 45px 0;
+}
+
+/* DASHBOARD */
+
+.hero {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    color: #94a3b8;
+    font-size: 17px;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.start-btn {
+    margin-top: 20px;
+    padding: 13px 24px;
+    border: none;
+    background: #22c55e;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.balance-card {
+    width: 330px;
+    background: #111827;
+    border: 1px solid #273449;
+    border-radius: 12px;
+    padding: 28px;
+}
+
+.balance-card p {
+    color: #94a3b8;
+}
+
+.balance-card h2 {
+    font-size: 32px;
+    margin: 15px 0;
+}
+
+.profit {
+    color: #22c55e !important;
+}
+
+/* CHART */
+
+.chart-container {
+    background: #101827;
+    border: 1px solid #273449;
+    border-radius: 12px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.chart-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.chart-title h2 {
+    margin-bottom: 5px;
+}
+
+.chart-title span {
+    color: #22c55e;
+    font-size: 14px;
+}
+
+.timeframes {
+    display: flex;
+    gap: 6px;
+}
+
+.timeframes button {
+    background: #182235;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+    padding: 7px 11px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.timeframes button:hover,
+.timeframes button.active {
+    background: #22c55e;
+    color: white;
+}
+
+#chart {
+    width: 100%;
+    height: 430px;
+    display: block;
+    background: #0b1220;
+    border-radius: 8px;
+}
+
+/* MARKETS */
+
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.market-card {
+    background: #111827;
+    border: 1px solid #273449;
+    border-radius: 10px;
+    padding: 20px;
+    transition: 0.2s;
+}
+
+.market-card:hover {
+    transform: translateY(-4px);
+    border-color: #22c55e;
+}
+
+.market-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.market-header span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.market-card h2 {
+    margin-bottom: 7px;
+}
+
+.green {
+    color: #22c55e;
+}
+
+.red {
+    color: #ef4444;
+}
+
+.trade-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.trade-buttons button {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    border-radius: 5px;
+    background: #22c55e;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.trade-buttons .sell {
+    background: #ef4444;
+}
+
+/* PORTFOLIO */
+
+.portfolio-card,
+.history-card {
+    background: #111827;
+    border: 1px solid #273449;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.portfolio-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #273449;
+}
+
+.portfolio-item:last-child {
+    border-bottom: none;
+}
+
+.portfolio-item p {
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #273449;
+}
+
+th {
+    color: #94a3b8;
+}
+
+/* FOOTER */
+
+footer {
+    background: #101827;
+    text-align: center;
+    padding: 30px;
+    color: #64748b;
+}
+
+/* MOBILE */
+
+@media(max-width: 900px) {
+
+    nav {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .balance-card {
+        width: 100%;
+    }
+
+    .market-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #chart {
+        height: 350px;
+    }
+}
+
+@media(max-width: 600px) {
+
+    main {
+        width: 94%;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .market-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .timeframes {
+        flex-wrap: wrap;
+    }
+
+    #chart {
+        height: 300px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 10px 6px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="logo">
+        FEMMY <span>FX</span>
+    </div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#chart-section">Chart</a>
+        <a href="#markets">Markets</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#history">History</a>
+    </nav>
+
+    <button class="login-btn" onclick="login()">
+        Login
+    </button>
+
+</header>
+
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="hero">
+
+    <div>
+
+        <h1>
+            Femmy FX Trading Account
+        </h1>
+
+        <p>
+            Analyze markets, monitor price movements,
+            and manage your trading portfolio from one
+            professional dashboard.
+        </p>
+
+        <button
+            class="start-btn"
+            onclick="goToChart()">
+
+            Open Chart
+
+        </button>
+
+    </div>
+
+    <div class="balance-card">
+
+        <p>Available Balance</p>
+
+        <h2 id="balance">
+            $10,000.00
+        </h2>
+
+        <p class="profit">
+            +$250.00 Today
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- CANDLESTICK CHART -->
+
+<section id="chart-section">
+
+    <div class="chart-container">
+
+        <div class="chart-top">
+
+            <div class="chart-title">
+
+                <h2>
+                    EUR/USD
+                </h2>
+
+                <span id="chart-price">
+                    1.1725
+                </span>
+
+            </div>
+
+            <div class="timeframes">
+
+                <button
+                    class="active"
+                    onclick="changeTimeframe(30, this)">
+                    1M
+                </button>
+
+                <button
+                    onclick="changeTimeframe(45, this)">
+                    5M
+                </button>
+
+                <button
+                    onclick="changeTimeframe(60, this)">
+                    15M
+                </button>
+
+                <button
+                    onclick="changeTimeframe(80, this)">
+                    1H
+                </button>
+
+                <button
+                    onclick="changeTimeframe(100, this)">
+                    4H
+                </button>
+
+            </div>
+
+        </div>
+
+        <canvas id="chart"></canvas>
+
+    </div>
+
+</section>
+
+
+<!-- MARKETS -->
+
+<section id="markets">
+
+    <h2>Markets</h2>
+
+    <div class="market-grid">
+
+        <!-- BTC -->
+
+        <div class="market-card">
+
+            <div class="market-header">
+                <h3>BTC/USD</h3>
+                <span>Crypto</span>
+            </div>
+
+            <h2 id="btc-price">
+                $67,450.00
+            </h2>
+
+            <p class="green">
+                +2.45%
+            </p>
+
+            <div class="trade-buttons">
+
+                <button onclick="trade('BTC/USD','buy')">
+                    Buy
+                </button>
+
+                <button
+                    class="sell"
+                    onclick="trade('BTC/USD','sell')">
+                    Sell
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ETH -->
+
+        <div class="market-card">
+
+            <div class="market-header">
+                <h3>ETH/USD</h3>
+                <span>Crypto</span>
+            </div>
+
+            <h2 id="eth-price">
+                $3,520.00
+            </h2>
+
+            <p class="green">
+                +1.82%
+            </p>
+
+            <div class="trade-buttons">
+
+                <button onclick="trade('ETH/USD','buy')">
+                    Buy
+                </button>
+
+                <button
+                    class="sell"
+                    onclick="trade('ETH/USD','sell')">
+                    Sell
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- EUR -->
+
+        <div class="market-card">
+
+            <div class="market-header">
+                <h3>EUR/USD</h3>
+                <span>Forex</span>
+            </div>
+
+            <h2 id="eur-price">
+                1.1725
+            </h2>
+
+            <p class="red">
+                -0.34%
+            </p>
+
+            <div class="trade-buttons">
+
+                <button onclick="trade('EUR/USD','buy')">
+                    Buy
+                </button>
+
+                <button
+                    class="sell"
+                    onclick="trade('EUR/USD','sell')">
+                    Sell
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GBP -->
+
+        <div class="market-card">
+
+            <div class="market-header">
+                <h3>GBP/USD</h3>
+                <span>Forex</span>
+            </div>
+
+            <h2 id="gbp-price">
+                1.3420
+            </h2>
+
+            <p class="green">
+                +0.41%
+            </p>
+
+            <div class="trade-buttons">
+
+                <button onclick="trade('GBP/USD','buy')">
+                    Buy
+                </button>
+
+                <button
+                    class="sell"
+                    onclick="trade('GBP/USD','sell')">
+                    Sell
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PORTFOLIO -->
+
+<section id="portfolio">
+
+    <h2>My Portfolio</h2>
+
+    <div class="portfolio-card">
+
+        <div class="portfolio-item">
+
+            <div>
+                <strong>Bitcoin</strong>
+                <p>BTC</p>
+            </div>
+
+            <div>
+                <strong>0.25 BTC</strong>
+                <p>$16,862.50</p>
+            </div>
+
+        </div>
+
+
+        <div class="portfolio-item">
+
+            <div>
+                <strong>Ethereum</strong>
+                <p>ETH</p>
+            </div>
+
+            <div>
+                <strong>2.5 ETH</strong>
+                <p>$8,800.00</p>
+            </div>
+
+        </div>
+
+
+        <div class="portfolio-item">
+
+            <div>
+                <strong>EUR/USD</strong>
+                <p>Forex</p>
+            </div>
+
+            <div>
+                <strong>1,000 Units</strong>
+                <p>$1,172.50</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section id="history">
+
+    <h2>Transaction History</h2>
+
+    <div class="history-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Asset</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="transaction-history">
+
+                <tr>
+
+                    <td>EUR/USD</td>
+
+                    <td class="green">
+                        BUY
+                    </td>
+
+                    <td>$100</td>
+
+                    <td>1.1725</td>
+
+                    <td>Completed</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        © 2026 Femmy FX Trading Account
+    </p>
+
+    <p style="margin-top:8px;">
+        Demo trading interface — simulated prices only.
+    </p>
+
+</footer>
+
+
+<script>
+
+/* =================================
+   ACCOUNT
+================================= */
+
+let balance = 10000;
+
+
+/* =================================
+   MARKET PRICES
+================================= */
+
+const prices = {
+
+    "BTC/USD": 67450,
+
+    "ETH/USD": 3520,
+
+    "EUR/USD": 1.1725,
+
+    "GBP/USD": 1.3420
+
+};
+
+
+/* =================================
+   CANDLESTICK DATA
+================================= */
+
+let candleCount = 60;
+
+let candles = [];
+
+let currentPrice = 1.1725;
+
+
+/* Create initial candles */
+
+function generateCandles() {
+
+    candles = [];
+
+    let price = currentPrice;
+
+    for (let i = 0; i < candleCount; i++) {
+
+        let open = price;
+
+        let movement =
+            (Math.random() - 0.48) * 0.004;
+
+        let close =
+            open + movement;
+
+        let high =
+            Math.max(open, close)
+            + Math.random() * 0.002;
+
+        let low =
+            Math.min(open, close)
+            - Math.random() * 0.002;
+
+        candles.push({
+            open: open,
+            high: high,
+            low: low,
+            close: close
+        });
+
+        price = close;
+    }
+
+    currentPrice = price;
+
+}
+
+
+/* =================================
+   DRAW CANDLESTICK CHART
+================================= */
+
+const canvas =
+    document.getElementById("chart");
+
+const ctx =
+    canvas.getContext("2d");
+
+
+function resizeCanvas() {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    canvas.width = rect.width * devicePixelRatio;
+
+    canvas.height = rect.height * devicePixelRatio;
+
+    ctx.scale(
+        devicePixelRatio,
+        devicePixelRatio
+    );
+
+    drawChart();
+
+}
+
+
+function drawChart() {
+
+    const width =
+        canvas.clientWidth;
+
+    const height =
+        canvas.clientHeight;
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    if (candles.length === 0) return;
+
+
+    /* Find price range */
+
+    let highest =
+        Math.max(...candles.map(c => c.high));
+
+    let lowest =
+        Math.min(...candles.map(c => c.low));
+
+
+    let padding =
+        (highest - lowest) * 0.12;
+
+    highest += padding;
+
+    lowest -= padding;
+
+
+    /* GRID */
+
+    ctx.strokeStyle = "#1d2939";
+
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 6; i++) {
+
+        let y =
+            20 +
+            i *
+            ((height - 40) / 6);
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, y);
+
+        ctx.lineTo(width, y);
+
+        ctx.stroke();
+
+        let price =
+            highest -
+            (i / 6) *
+            (highest - lowest);
+
+        ctx.fillStyle = "#64748b";
+
+        ctx.font = "11px Arial";
+
+        ctx.fillText(
+            price.toFixed(4),
+            width - 55,
+            y - 3
+        );
+    }
+
+
+    /* CANDLE WIDTH */
+
+    const chartWidth =
+        width - 65;
+
+    const candleWidth =
+        chartWidth / candles.length;
+
+    const bodyWidth =
+        Math.max(3, candleWidth * 0.65);
+
+
+    /* DRAW CANDLES */
+
+    candles.forEach((candle, index) => {
+
+        const x =
+            index * candleWidth + 5;
+
+        const openY =
+            20 +
+            ((highest - candle.open) /
+            (highest - lowest)) *
+            (height - 40);
+
+        const closeY =
+            20 +
+            ((highest - candle.close) /
+            (highest - lowest)) *
+            (height - 40);
+
+        const highY =
+            20 +
+            ((highest - candle.high) /
+            (highest - lowest)) *
+            (height - 40);
+
+        const lowY =
+            20 +
+            ((highest - candle.low) /
+            (highest - lowest)) *
+            (height - 40);
+
+
+        const bullish =
+            candle.close >= candle.open;
+
+
+        /* WICK */
+
+        ctx.strokeStyle =
+            bullish
+            ? "#22c55e"
+            : "#ef4444";
+
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x + bodyWidth / 2,
+            highY
+        );
+
+        ctx.lineTo(
+            x + bodyWidth / 2,
+            lowY
+        );
+
+        ctx.stroke();
+
+
+        /* BODY */
+
+        ctx.fillStyle =
+            bullish
+            ? "#22c55e"
+            : "#ef4444";
+
+
+        const bodyTop =
+            Math.min(openY, closeY);
+
+        const bodyHeight =
+            Math.max(
+                2,
+                Math.abs(
+                    closeY - openY
+                )
+            );
+
+
+        ctx.fillRect(
+            x,
+            bodyTop,
+            bodyWidth,
+            bodyHeight
+        );
+
+    });
+
+
+    /* CURRENT PRICE LINE */
+
+    let last =
+        candles[candles.length - 1];
+
+    let currentY =
+        20 +
+        ((highest - last.close) /
+        (highest - lowest)) *
+        (height - 40);
+
+
+    ctx.setLineDash([5, 5]);
+
+    ctx.strokeStyle = "#facc15";
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, currentY);
+
+    ctx.lineTo(width, currentY);
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+
+    /* PRICE LABEL */
+
+    ctx.fillStyle = "#facc15";
+
+    ctx.fillRect(
+        width - 62,
+        currentY - 9,
+        62,
+        18
+    );
+
+    ctx.fillStyle = "#111827";
+
+    ctx.font = "bold 10px Arial";
+
+    ctx.fillText(
+        last.close.toFixed(4),
+        width - 58,
+        currentY + 4
+    );
+
+
+    document.getElementById(
+        "chart-price"
+    ).textContent =
+        last.close.toFixed(4);
+
+}
+
+
+/* =================================
+   LIVE CANDLE UPDATE
+================================= */
+
+function updateCandle() {
+
+    let last =
+        candles[candles.length - 1];
+
+
+    let newClose =
+        last.close +
+        (Math.random() - 0.48) *
+        0.0015;
+
+
+    last.close = newClose;
+
+    last.high =
+        Math.max(
+            last.high,
+            newClose
+        );
+
+    last.low =
+        Math.min(
+            last.low,
+            newClose
+        );
+
+
+    drawChart();
+
+}
+
+
+/* Add a new candle periodically */
+
+function newCandle() {
+
+    let last =
+        candles[candles.length - 1];
+
+    let open =
+        last.close;
+
+    let close =
+        open +
+        (Math.random() - 0.48) *
+        0.004;
+
+    let high =
+        Math.max(open, close)
+        + Math.random() * 0.002;
+
+    let low =
+        Math.min(open, close)
+        - Math.random() * 0.002;
+
+
+    candles.push({
+        open: open,
+        high: high,
+        low: low,
+        close: close
+    });
+
+
+    if (candles.length > candleCount) {
+        candles.shift();
+    }
+
+
+    drawChart();
+
+}
+
+
+/* =================================
+   TIMEFRAME
+================================= */
+
+function changeTimeframe(
+    count,
+    button
+) {
+
+    candleCount = count;
+
+    document
+        .querySelectorAll(".timeframes button")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+    generateCandles();
+
+    drawChart();
+
+}
+
+
+/* =================================
+   TRADING
+================================= */
+
+function trade(asset, type) {
+
+    let price =
+        prices[asset];
+
+    let amount = 100;
+
+
+    if (type === "buy") {
+
+        if (balance < amount) {
+
+            alert(
+                "Insufficient demo balance."
+            );
+
+            return;
+        }
+
+        balance -= amount;
+
+    } else {
+
+        balance += amount;
+
+    }
+
+
+    document.getElementById(
+        "balance"
+    ).textContent =
+        "$" + balance.toFixed(2);
+
+
+    addTransaction(
+        asset,
+        type,
+        amount,
+        price
+    );
+
+
+    alert(
+        type.toUpperCase() +
+        " order placed for " +
+        asset +
+        " at " +
+        price.toFixed(4)
+    );
+
+}
+
+
+/* =================================
+   TRANSACTION HISTORY
+================================= */
+
+function addTransaction(
+    asset,
+    type,
+    amount,
+    price
+) {
+
+    const table =
+        document.getElementById(
