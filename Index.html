@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>LGR STORE | Shop Premium</title>
+<style>
+:root{--dark:#07111f;--blue:#2563eb;--green:#00a859;--bg:#f4f7fb}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+button,input{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:10;background:var(--dark);color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:23px;font-weight:900}.brand span{color:#60a5fa}
+header button{padding:9px 12px;border:0;border-radius:7px}
+#userArea{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hero{padding:55px 7%;background:linear-gradient(120deg,#07111f,#1d4ed8);color:white}
+.hero .tag{background:#dbeafe;color:#1d4ed8;padding:7px 12px;border-radius:20px;font-size:12px;font-weight:bold}
+.hero h1{font-size:clamp(34px,6vw,55px);margin:22px 0 12px}
+.hero p{line-height:1.7;color:#dbeafe;max-width:580px}
+.hero button{background:white;border:0;padding:13px 18px;border-radius:8px;font-weight:bold;margin-top:8px}
+main{max-width:1200px;margin:auto;padding:28px 18px}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.heading p{color:#64748b;font-size:14px}
+#search{padding:12px;border:1px solid #dbe2ee;border-radius:9px;width:min(100%,300px)}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:17px;margin-top:20px}
+.card{background:white;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px #00000008}
+.card img{width:100%;height:190px;object-fit:cover;background:#e2e8f0;display:block}
+.card-body{padding:15px}
+.offer{font-size:11px;color:#166534;background:#dcfce7;padding:6px;border-radius:5px}
+.card h3{font-size:16px;margin:12px 0 8px}
+.price{font-size:19px;color:var(--blue);font-weight:bold}
+.card button{width:100%;padding:11px;background:var(--dark);color:white;border:0;border-radius:8px;margin-top:12px}
+.card button:hover{background:var(--blue)}
+.cart{margin-top:32px;padding:22px;background:white;border:1px solid #e2e8f0;border-radius:14px}
+.cart-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #e2e8f0}
+.item-name{font-weight:bold}.muted{color:#64748b;font-size:13px;margin-top:5px}
+.quantity{display:flex;align-items:center;gap:8px}
+.quantity button,.remove{padding:6px 10px;border:1px solid #ddd;border-radius:6px;background:white}
+.remove{color:#dc2626}
+.total-row{display:flex;justify-content:space-between;font-size:20px;font-weight:bold;margin-top:20px}
+.checkout-btn{width:100%;padding:15px;border:0;border-radius:9px;background:var(--green);color:white;font-weight:bold;margin-top:15px}
+.checkout-btn:disabled{background:#94a3b8;cursor:not-allowed}
+.notice{font-size:13px;color:#64748b;line-height:1.6}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:30;align-items:center;justify-content:center;padding:15px}
+.modal.active{display:flex}
+.modal-box{width:min(100%,380px);background:white;border-radius:15px;padding:23px}
+.modal-box input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:8px;margin:10px 0}
+.modal-box button{width:100%;padding:12px;border:0;border-radius:8px;margin-top:8px}
+.pay{background:var(--green);color:white}.cancel{background:#e2e8f0}
+#status{font-size:14px;line-height:1.6}
+footer{text-align:center;padding:28px;color:#64748b;font-size:13px}
+#heartCanvas{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:480px){header{padding:13px}.brand{font-size:18px}.hero{padding:42px 22px}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card img{height:140px}.card-body{padding:10px}.card h3{font-size:14px}.price{font-size:16px}main{padding:22px 12px}.cart{padding:15px}}
+</style>
+</head>
+<body>
+<canvas id="heartCanvas"></canvas>
+
+<header>
+  <a href="#top" style="color:white;text-decoration:none" class="brand">LGR <span>STORE</span> 🛒</a>
+  <div id="userArea">
+    <button onclick="login()" style="background:#2563eb;color:white">Login</button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <span class="tag">✨ OFFERS AVAILABLE</span>
+  <h1>Upgrade Your Style.<br>Shop LGR.</h1>
+  <p>Discover premium fashion and accessories at affordable prices. Shop your favourites and check out conveniently.</p>
+  <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Collection →</button>
+</section>
+
+<main>
+  <section id="shop">
+    <div class="heading">
+      <div><h2>Our Collection</h2><p>Find something you love.</p></div>
+      <input id="search" type="search" placeholder="Search products..." oninput="renderProducts()">
+    </div>
+    <div class="products" id="products"></div>
+  </section>
+
+  <section class="cart" id="cart">
+    <h2>🛍️ Your Shopping Cart (<span id="cartCount">0</span>)</h2>
+    <div id="cartList">Your cart is empty.</div>
+    <div class="total-row"><span>Total</span><span>KES <span id="total">0</span></span></div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openPayment()" disabled>Checkout with M-Pesa</button>
+    <p class="notice">Secure payment: Your order will only be marked PAID after the payment provider confirms the transaction. Never share your M-Pesa PIN on this website.</p>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> LGR STORE. All rights reserved.</footer>
+
+<div class="modal" id="paymentModal">
+  <div class="modal-box">
+    <h2>Pay with M-Pesa</h2>
+    <p class="notice">Enter your Safaricom number to request an M-Pesa payment prompt.</p>
+    <label for="phone">M-Pesa phone number</label>
+    <input id="phone" type="tel" placeholder="0712345678" maxlength="13" autocomplete="tel">
+    <p><b>Order total: KES <span id="payTotal">0</span></b></p>
+    <p class="notice" id="status">Your phone will receive a payment prompt when the backend is connected.</p>
+    <button class="pay" id="payButton" onclick="payNow()">Request M-Pesa Payment</button>
+    <button class="cancel" onclick="closePayment()">Cancel</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// Change this URL to your deployed Node.js backend.
+const API_BASE = "http://localhost:3000";
+
+const productsData = [
+  {id:1,name:"LGR Premium Hoodie",price:2500,img:"https://placehold.co/500x400/172554/ffffff?text=LGR+Hoodie"},
+  {id:2,name:"LGR Classic T-Shirt",price:1200,img:"https://placehold.co/500x400/e2e8f0/172554?text=LGR+Tee"},
+  {id:3,name:"LGR Signature Cap",price:800,img:"https://placehold.co/500x400/172554/ffffff?text=LGR+Cap"},
+  {id:4,name:"LGR Sneakers",price:4500,img:"https://placehold.co/500x400/e2e8f0/172554?text=Sneakers"},
+  {id:5,name:"LGR Backpack",price:2200,img:"https://placehold.co/500x400/172554/ffffff?text=Backpack"},
+  {id:6,name:"LGR Smart Watch",price:3500,img:"https://placehold.co/500x400/e2e8f0/172554?text=Smart+Watch"},
+  {id:7,name:"LGR Wireless Headphones",price:2800,img:"https://placehold.co/500x400/172554/ffffff?text=Headphones"},
+  {id:8,name:"LGR Sunglasses",price:1000,img:"https://placehold.co/500x400/e2e8f0/172554?text=Sunglasses"}
+];
+
+let cart = loadCart();
+let paymentRequestInProgress = false;
+
+function loadCart(){
+  try{
+    const saved = JSON.parse(localStorage.getItem("lgrCart") || "[]");
+    if(!Array.isArray(saved)) return [];
+    return saved.map(item => ({
+      id:Number(item.id),
+      quantity:Math.min(20,Math.max(1,Number(item.quantity)||1))
+    })).filter(item => productsData.some(p => p.id === item.id));
+  }catch{return [];}
+}
+
+function saveCart(){
+  localStorage.setItem("lgrCart",JSON.stringify(cart));
+}
+
+function currentUser(){
+  try{return JSON.parse(localStorage.getItem("lgrUser")||"null");}
+  catch{return null;}
+}
+
+function login(){
+  location.href="apex-hearts.html";
+}
+
+function renderUser(){
+  const user=currentUser();
+  const area=document.getElementById("userArea");
+
+  if(user && user.isLoggedIn){
+    const greeting=document.createElement("span");
+    greeting.textContent="Hi, "+String(user.name||"Customer");
+    area.replaceChildren(greeting);
+
+    const logoutButton=document.createElement("button");
+    logoutButton.textContent="Logout";
+    logoutButton.style.background="#e2e8f0";
+    logoutButton.onclick=()=>{
+      localStorage.removeItem("lgrUser");
+      location.href="apex-hearts.html";
+    };
+    area.appendChild(logoutButton);
+  }else{
+    area.replaceChildren();
+    const button=document.createElement("button");
+    button.textContent="Login";
+    button.style.background="#2563eb";
+    button.style.color="white";
+    button.onclick=login;
+    area.appendChild(button);
+  }
+}
+
+function renderProducts(){
+  const term=document.getElementById("search").value.toLowerCase().trim();
+  const container=document.getElementById("products");
+  container.replaceChildren();
+
+  productsData.filter(p=>p.name.toLowerCase().includes(term)).forEach(p=>{
+    const card=document.createElement("article");
+    card.className="card";
+
+    const img=document.createElement("img");
+    img.src=p.img;
+    img.alt=p.name;
+    img.loading="lazy";
+    img.onerror=()=>{img.onerror=null;img.src="https://placehold.co/500x400/e2e8f0/172554?text=LGR+Store";};
+
+    const body=document.createElement("div");
+    body.className="card-body";
+    body.innerHTML='<span class="offer">OFFER AVAILABLE</span>';
+
+    const name=document.createElement("h3");
+    name.textContent=p.name;
+
+    const price=document.createElement("div");
+    price.className="price";
+    price.textContent="KES "+p.price.toLocaleString("en-KE");
+
+    const button=document.createElement("button");
+    button.textContent="Add to Cart";
+    button.onclick=()=>addToCart(p.id);
+
+    body.append(name,price,button);
+    card.append(img,body);
+    container.appendChild(card);
+  });
+
+  if(!container.children.length){
+    container.textContent="No products match your search.";
+  }
+}
+
+function addToCart(id){
+  const item=cart.find(i=>i.id===id);
+  if(item){
+    if(item.quantity>=20){alert("Maximum quantity is 20 per product.");return;}
+    item.quantity++;
+  }else{
+    cart.push({id,quantity:1});
+  }
+  saveCart();
+  renderCart();
+}
+
+function changeQuantity(id,delta){
+  const item=cart.find(i=>i.id===id);
+  if(!item)return;
+  item.quantity+=delta;
+  if(item.quantity<=0)cart=cart.filter(i=>i.id!==id);
+  if(item.quantity>20)item.quantity=20;
+  saveCart();
+  renderCart();
+}
+
+function removeItem(id){
+  cart=cart.filter(i=>i.id!==id);
+  saveCart();
+  renderCart();
+}
+
+function getTotal(){
+  return cart.reduce((sum,item)=>{
+    const product=productsData.find(p=>p.id===item.id);
+    return sum+(product?product.price*item.quantity:0);
+  },0);
+}
+
+function renderCart(){
+  const list=document.getElementById("cartList");
+  list.replaceChildren();
+
+  document.getElementById("cartCount").textContent=
+    cart.reduce((sum,i)=>sum+i.quantity,0);
+  document.getElementById("total").textContent=getTotal().toLocaleString("en-KE");
+  document.getElementById("payTotal").textContent=getTotal().toLocaleString("en-KE");
+  document.getElementById("checkoutBtn").disabled=cart.length===0;
+
+  if(!cart.length){
+    list.textContent="Your cart is empty.";
+    return;
+  }
+
+  cart.forEach(item=>{
+    const product=productsData.find(p=>p.id===item.id);
+    if(!product)return;
+
+    const row=document.createElement("div");
+    row.className="cart-row";
+
+    const details=document.createElement("div");
+    const name=document.createElement("div");
+    name.className="item-name";
+    name.textContent=product.name;
+
+    const sub=document.createElement("div");
+    sub.className="muted";
+    sub.textContent="KES "+(product.price*item.quantity).toLocaleString("en-KE");
+
+    details.append(name,sub);
+
+    const controls=document.createElement("div");
+    controls.className="quantity";
+
+    const minus=document.createElement("button");
+    minus.textContent="−";
+    minus.setAttribute("aria-label","Decrease quantity");
+    minus.onclick=()=>changeQuantity(item.id,-1);
+
+    const qty=document.createElement("span");
+    qty.textContent=item.quantity;
+
+    const plus=document.createElement("button");
+    plus.textContent="+";
+    plus.setAttribute("aria-label","Increase quantity");
+    plus.onclick=()=>changeQuantity(item.id,1);
+
+    const remove=document.createElement("button");
+    remove.className="remove";
+    remove.textContent="Remove";
+    remove.onclick=()=>removeItem(item.id);
+
+    controls.append(minus,qty,plus,remove);
+    row.append(details,controls);
+    list.appendChild(row);
+  });
+}
+
+function openPayment(){
+  if(!cart.length)return;
+  const user=currentUser();
+  if(!user || !user.isLoggedIn){
+    alert("Please log in before checkout.");
+    login();
+    return;
+  }
+  document.getElementById("paymentModal").classList.add("active");
+  document.getElementById("status").textContent=
+    "Enter your phone number to request payment.";
+}
+
+function closePayment(){
+  if(paymentRequestInProgress)return;
+  document.getElementById("paymentModal").classList.remove("active");
+}
+
+function normalisePhone(value){
+  let phone=value.replace(/[\s-]/g,"");
+  if(/^07\d{8}$/.test(phone))return "254"+phone.slice(1);
+  if(/^01\d{8}$/.test(phone))return "254"+phone.slice(1);
+  if(/^\+254[17]\d{8}$/.test(phone))return phone.slice(1);
+  if(/^254[17]\d{8}$/.test(phone))return phone;
+  return null;
+}
+
+async function payNow(){
+  if(paymentRequestInProgress)return;
+  if(!cart.length){alert("Your cart is empty.");return;}
+
+  const phone=normalisePhone(document.getElementById("phone").value.trim());
+  if(!phone){
+    alert("Enter a valid Kenyan mobile number, for example 0712345678.");
+    return;
+  }
+
+  const user=currentUser();
+  if(!user || !user.isLoggedIn){
+    alert("Please log in first.");
+    login();
+    return;
+  }
+
+  paymentRequestInProgress=true;
+  const button=document.getElementById("payButton");
+  const status=document.getElementById("status");
+  button.disabled=true;
+  button.textContent="Requesting...";
+  status.textContent="Contacting the payment server. Please wait.";
+
+  try{
+    /*
+      The backend must:
+      1. Verify products and prices itself.
+      2. Create an order with status PENDING.
+      3. Request the Daraja STK Push.
+      4. Verify the callback from Safaricom.
+      5. Mark the order PAID only after verified success.
+      6. Never trust an amount or payment result from the browser.
+    */
+    const response=await fetch(API_BASE+"/api/mpesa/stkpush",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        phone,
+        items:cart.map(i=>({productId:i.id,quantity:i.quantity}))
+      })
+    });
+
+    const data=await response.json().catch(()=>({}));
+
+    if(!response.ok){
+      throw new Error(data.message||"Payment request failed. Check your backend configuration.");
+    }
+
+    status.textContent=data.message||
+      "Payment request submitted. Follow the instructions on your phone. Your order is not yet confirmed as paid.";
+
+    button.textContent="Request Sent";
+    /*
+      Do not clear the cart or show PAID here.
+      The backend should provide an authenticated order-status endpoint
+      or send a verified order update.
+    */
+  }catch(error){
+    status.textContent=error.message||
+      "Cannot contact the payment server. Check that your backend is running.";
+    button.disabled=false;
+    button.textContent="Try Again";
+  }finally{
+    paymentRequestInProgress=false;
+  }
+}
+
+document.getElementById("year").textContent=new Date().getFullYear();
+renderUser();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
